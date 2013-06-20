@@ -36,11 +36,7 @@ import com.google.api.services.datastore.client.DatastoreHelper;
 import com.google.api.services.datastore.client.DatastoreOptions;
 
 /**
- * 
- */
-
-/**
- * @author Ryo Yamasaki (vierjp)
+ * @see https://developers.google.com/datastore/docs/getstarted/start_java/
  * 
  */
 public class ClientTest2 {

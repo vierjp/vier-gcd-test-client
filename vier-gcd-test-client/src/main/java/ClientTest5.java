@@ -37,6 +37,10 @@ import com.google.api.services.datastore.client.DatastoreFactory;
 import com.google.api.services.datastore.client.DatastoreHelper;
 import com.google.api.services.datastore.client.DatastoreOptions;
 
+/**
+ * @see https://developers.google.com/datastore/docs/getstarted/start_java/
+ * 
+ */
 public class ClientTest5 {
 	private static final Logger logger = Logger.getLogger(ClientTest3.class.getName());
 

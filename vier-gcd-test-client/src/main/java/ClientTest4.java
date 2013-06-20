@@ -23,6 +23,10 @@ import com.google.api.services.datastore.client.DatastoreException;
 import com.google.api.services.datastore.client.DatastoreFactory;
 import com.google.api.services.datastore.client.DatastoreOptions;
 
+/**
+ * @see https://developers.google.com/datastore/docs/getstarted/start_java/
+ * 
+ */
 public class ClientTest4 {
 	private static final Logger logger = Logger.getLogger(ClientTest4.class.getName());
 	public static final String[] SCOPES = new String[] { "https://www.googleapis.com/auth/datastore",
