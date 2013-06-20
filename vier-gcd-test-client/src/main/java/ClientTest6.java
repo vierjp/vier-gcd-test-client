@@ -91,33 +91,31 @@ public class ClientTest6 {
         sw.reset();
         sw.start();
 
-        for (int i = 1; i <= 100; i++) {
-            try {
-                // Create an RPC request to query
-                RunQueryRequest.Builder req = RunQueryRequest.newBuilder();
-                Query.Builder queryBuilder = req.getQueryBuilder();
-                queryBuilder.addKindBuilder().setName("ClientTest3");
-                // order by createDate
-                queryBuilder.addOrder(DatastoreHelper.makeOrder("createDate", PropertyOrder.Direction.DESCENDING));
-                // limit 10
-                queryBuilder.setLimit(10);
-                // run query
-                RunQueryResponse res = datastore.runQuery(req.build());
+        try {
+            // Create an RPC request to query
+            RunQueryRequest.Builder req = RunQueryRequest.newBuilder();
+            Query.Builder queryBuilder = req.getQueryBuilder();
+            queryBuilder.addKindBuilder().setName("ClientTest3");
+            // order by createDate
+            queryBuilder.addOrder(DatastoreHelper.makeOrder("createDate", PropertyOrder.Direction.DESCENDING));
+            // limit 10
+            queryBuilder.setLimit(10);
+            // run query
+            RunQueryResponse res = datastore.runQuery(req.build());
 
-                List<EntityResult> results = res.getBatch().getEntityResultList();
-                for (EntityResult result : results) {
-                    Entity entity = result.getEntity();
+            List<EntityResult> results = res.getBatch().getEntityResultList();
+            for (EntityResult result : results) {
+                Entity entity = result.getEntity();
 
-                    Map<String, Object> propertyMap = DatastoreHelper.getPropertyMap(entity);
-                    logger.info("Entity: keyName:" + entity.getKey().getPathElement(0).getName() + " str:"
-                            + propertyMap.get("str") + " number:" + propertyMap.get("number") + " createDate:"
-                            + propertyMap.get("createDate"));
-                }
-
-            } catch (DatastoreException exception) {
-                logger.log(Level.SEVERE, "error", exception);
-                System.exit(1);
+                Map<String, Object> propertyMap = DatastoreHelper.getPropertyMap(entity);
+                logger.info("Entity: keyName:" + entity.getKey().getPathElement(0).getName() + " str:"
+                        + propertyMap.get("str") + " number:" + propertyMap.get("number") + " createDate:"
+                        + propertyMap.get("createDate"));
             }
+
+        } catch (DatastoreException exception) {
+            logger.log(Level.SEVERE, "error", exception);
+            System.exit(1);
         }
         sw.stop();
         logger.info("query entities " + sw.getTime() + " milliseconds.");
