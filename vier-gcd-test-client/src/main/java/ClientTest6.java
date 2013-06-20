@@ -56,25 +56,27 @@ public class ClientTest6 {
 		sw.start();
 		for (int i = 1; i <= 1000; i++) {
 			try {
-				// トランザクション外で更新するためのRPC requestを作成する
+				// Create an RPC request to write mutations outside of a
+				// transaction.
 				BlindWriteRequest.Builder req = BlindWriteRequest.newBuilder();
-				// 新規Entityを作成する
+				// Create a new entity.
 				Entity.Builder entity = Entity.newBuilder();
-				// 一つのPathElementでKeyを生成する (親Keyなし)
+				// Set the entity key with only one `path_element`: no parent.
 				Key.Builder key = Key.newBuilder().addPathElement(
 						Key.PathElement.newBuilder().setKind("ClientTest3").setName("keyName" + i));
 				entity.setKey(key);
-				// 文字列
+				// Add three entity properties:
+				// - a utf-8 string: `str`
 				entity.addProperty(Property.newBuilder().setName("str")
 						.addValue(Value.newBuilder().setStringValue("string" + i)));
-				// 数値
+				// - a 64bit integer: `number`
 				entity.addProperty(Property.newBuilder().setName("number")
 						.addValue(Value.newBuilder().setIntegerValue(i)));
-				// 作成時刻
+				// - a date: `createDate`
 				entity.addProperty(Property.newBuilder().setName("createDate")
 						.addValue(Value.newBuilder().setTimestampMicrosecondsValue(new Date().getTime() * 1000)));
 				req.getMutationBuilder().addUpsert(entity);
-				// putする
+				// Execute the RPC synchronously and ignore the response.
 				datastore.blindWrite(req.build());
 
 				logger.info("put done count:" + i);
@@ -90,15 +92,15 @@ public class ClientTest6 {
 		sw.start();
 
 		try {
-			// クエリする
+			// Create an RPC request to query
 			RunQueryRequest.Builder req = RunQueryRequest.newBuilder();
 			Query.Builder queryBuilder = req.getQueryBuilder();
 			queryBuilder.addKindBuilder().setName("ClientTest3");
-			// 作成時刻の新しい順
+			// order by createDate
 			queryBuilder.addOrder(DatastoreHelper.makeOrder("createDate", PropertyOrder.Direction.DESCENDING));
-			// limit 5件
+			// limit 10
 			queryBuilder.setLimit(10);
-			// クエリ実行
+			// run query
 			RunQueryResponse res = datastore.runQuery(req.build());
 
 			List<EntityResult> results = res.getBatch().getEntityResultList();
